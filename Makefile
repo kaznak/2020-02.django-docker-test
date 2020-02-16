@@ -11,3 +11,6 @@ migrate:
 	docker-compose run web python manage.py makemigrations polls
 	# docker-compose run web python manage.py sqlmigrate polls 0001
 	docker-compose run web python manage.py migrate
+
+test:
+	docker-compose run web python manage.py test polls
