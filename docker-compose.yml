@@ -2,11 +2,18 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    build:
+      context: .
+      dockerfile: Dockerfile-db
     environment:
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-web
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
