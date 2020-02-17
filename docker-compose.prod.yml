@@ -5,6 +5,7 @@ services:
     image: nginx
     volumes:
       - ./etc/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public_www:/public_www
     ports:
       - "8000:80"
     depends_on:
