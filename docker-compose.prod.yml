@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  web:
+    image: nginx
+    volumes:
+      - ./etc/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8000:80"
+    depends_on:
+      - app
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    command: uwsgi --uid nobody --uwsgi-socket 0.0.0.0:8000 --module=composeexample.wsgi:application --env DJANGO_SETTINGS_MODULE=composeexample.settings
+#    command: uwsgi --uid nobody --http 0.0.0.0:8000 --module=composeexample.wsgi:application --env DJANGO_SETTINGS_MODULE=composeexample.settings
+    volumes:
+      - .:/code
+    depends_on:
+      - db
